@@ -11,7 +11,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.properties.Delegates
-
+import com.drake.net.NetConfig
+import java.util.concurrent.TimeUnit
 
 val app: App
     inline get() = App.instance
@@ -32,6 +33,13 @@ class App : Application() {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
+        NetConfig.initialize("", this) {
+
+            // 超时设置
+            connectTimeout(30, TimeUnit.SECONDS)
+            readTimeout(30, TimeUnit.SECONDS)
+            writeTimeout(30, TimeUnit.SECONDS)
+        }
         instance = this
         CrashHandler(this)
 
